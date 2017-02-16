@@ -13,7 +13,7 @@ import scala.io.StdIn;
   */
 object WebServer extends App {
 
-  implicit val system = ActorSystem("my-system")
+  implicit val system = ActorSystem("Facts")
   implicit val materializer = ActorMaterializer()
   // needed for the future flatMap/onComplete in the end
   implicit val executionContext = system.dispatcher
