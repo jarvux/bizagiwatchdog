@@ -20,11 +20,10 @@ object Facts {
       val storageAccount =
         CloudStorageAccount.parse("DefaultEndpointsProtocol=http;AccountName=camilohbotxjt4cl;AccountKey=pnPB+Nb6NYjLWpWE+pvKbUNodBO77wuBaq6fTT3Woyn0ysn67+2F119n2AlOOCMoyota4+LCesDM04PqoNuZPg==");
       val tableClient = storageAccount.createCloudTableClient();
-      val tableName = "fact";
-      val cloudTable = tableClient.getTableReference(tableName);
+      val cloudTable = tableClient.getTableReference("fact");
       cloudTable.createIfNotExists();
-      val insertCustomer1 = TableOperation.insertOrReplace(fact);
-      cloudTable.execute(insertCustomer1)
+      val insertFact = TableOperation.insertOrReplace(fact);
+      cloudTable.execute(insertFact)
     }
   }
 

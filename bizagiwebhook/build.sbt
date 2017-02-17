@@ -37,10 +37,10 @@ dockerfile in docker := {
 
   new Dockerfile {
     from("jdk8")
-    //add:(artifact, artifactTargetPath)
-    add(new File("/Users/dev-camiloh/Camilo/Data/Personal/Tests/github/bags-of-knowledge/scala/bizagiwebhook"), "/app/")
+    add(artifact, artifactTargetPath)
+    //add(new File("/Users/dev-camiloh/Camilo/Data/dv/github/bizagiwatchdog/bizagiwebhook"), "/app/")
     workDir("/app")
-    entryPoint("sbt", """"runMain com.bizagi.webhook.WebServer" """)
+    commands(Seq["","",""]"java -jar bizagiwebhook-assembly-1.0.jar")
   }
 }
 

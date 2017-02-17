@@ -21,11 +21,11 @@ object WebServer extends App {
   val route =
     path("api" / "webhook") {
       get {
-        complete("hello world")
+        complete("ping")
       } ~ post {
         complete {
           val response: String = Facts.saveFact(Fact("1", "2", "test"))
-            .map(_ => "hello world")
+            .map(_ => "fact was saved")
             .recover {
               case e: Exception => e.printStackTrace(); e.toString
             }
