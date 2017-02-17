@@ -36,11 +36,11 @@ dockerfile in docker := {
   val artifactTargetPath = s"/app/${artifact.name}"
 
   new Dockerfile {
-    from("jdk8")
+    from("jdk:1.8")
     add(artifact, artifactTargetPath)
     //add(new File("/Users/dev-camiloh/Camilo/Data/dv/github/bizagiwatchdog/bizagiwebhook"), "/app/")
     workDir("/app")
-    commands(Seq["","",""]"java -jar bizagiwebhook-assembly-1.0.jar")
+    entryPoint("java", "-jar", artifactTargetPath)
   }
 }
 
