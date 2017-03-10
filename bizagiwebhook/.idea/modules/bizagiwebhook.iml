@@ -18,37 +18,36 @@
       <sourceFolder url="file://$MODULE_DIR$/../../src/test/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../target/scala-2.12/resource_managed/test" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/../../target" />
-      <excludeFolder url="file://$MODULE_DIR$/../../target/docker" />
       <excludeFolder url="file://$MODULE_DIR$/../../target/resolution-cache" />
       <excludeFolder url="file://$MODULE_DIR$/../../target/streams" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="SBT: org.scala-lang:scala-library:2.12.1:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.fasterxml.jackson.core:jackson-annotations:2.7.0:jar" level="project" />
     <orderEntry type="library" name="SBT: org.slf4j:slf4j-api:1.7.12:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.scala-lang.modules:scala-xml_2.12:1.0.5:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.scala-lang.modules:scala-java8-compat_2.12:0.8.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.reactivestreams:reactive-streams:1.0.0:jar" level="project" />
     <orderEntry type="library" name="SBT: org.apache.commons:commons-lang3:3.4:jar" level="project" />
+    <orderEntry type="library" name="SBT: io.spray:spray-json_2.12:1.3.3:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-testkit_2.12:2.4.16:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-stream_2.12:2.4.16:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-stream-testkit_2.12:2.4.16:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-parsing_2.12:10.0.3:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-http_2.12:10.0.3:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-http-xml_2.12:10.0.3:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-http-testkit_2.12:10.0.3:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-http-spray-json_2.12:10.0.3:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-http-jackson_2.12:10.0.3:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-http-core_2.12:10.0.3:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-actor_2.12:2.4.16:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.typesafe:ssl-config-core_2.12:0.2.1:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.typesafe:config:1.3.0:jar" level="project" />
     <orderEntry type="library" name="SBT: com.microsoft.azure:azure-storage:5.0.0:jar" level="project" />
     <orderEntry type="library" name="SBT: com.microsoft.azure:azure-keyvault-core:0.8.0:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.fasterxml.jackson.core:jackson-annotations:2.7.0:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.fasterxml.jackson.core:jackson-core:2.7.6:jar" level="project" />
     <orderEntry type="library" name="SBT: com.fasterxml.jackson.core:jackson-databind:2.7.6:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe:config:1.3.0:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe:ssl-config-core_2.12:0.2.1:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-actor_2.12:2.4.16:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-http-core_2.12:10.0.3:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-http-jackson_2.12:10.0.3:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-http-spray-json_2.12:10.0.3:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-http-testkit_2.12:10.0.3:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-http-xml_2.12:10.0.3:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-http_2.12:10.0.3:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-parsing_2.12:10.0.3:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-stream-testkit_2.12:2.4.16:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-stream_2.12:2.4.16:jar" level="project" />
-    <orderEntry type="library" name="SBT: com.typesafe.akka:akka-testkit_2.12:2.4.16:jar" level="project" />
-    <orderEntry type="library" name="SBT: io.spray:spray-json_2.12:1.3.3:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.reactivestreams:reactive-streams:1.0.0:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.scala-lang.modules:scala-java8-compat_2.12:0.8.0:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.scala-lang.modules:scala-xml_2.12:1.0.5:jar" level="project" />
+    <orderEntry type="library" name="SBT: com.fasterxml.jackson.core:jackson-core:2.7.6:jar" level="project" />
+    <orderEntry type="library" name="scala-sdk-2.12.1" level="application" />
   </component>
 </module>

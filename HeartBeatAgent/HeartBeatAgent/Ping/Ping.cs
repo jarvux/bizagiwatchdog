@@ -1,31 +1,36 @@
 ﻿using HeartBeatAgent.Rest;
 using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using Newtonsoft.Json;
 using static LanguageExt.Prelude;
 
 namespace HeartBeatAgent.Ping
 {
-    interface IPing
+    internal interface IPing
     {
         PingResult TryPingServer();
     }
 
-    public class PingEnv
+    internal class PingEnv
     {
-        public PingEnv(string host, string project, string uri)
+        public PingEnv(string host, string project, string uri, string environment, string node, double lapse)
         {
             Host = host;
             Project = project;
             Uri = uri;
+            Environment = environment;
+            Node = node;
+            Lapse = lapse;
         }
 
         public string Host { private set; get; }
         public string Project { private set; get; }
         public string Uri { private set; get; }
+        public string Node {  set; get; }
+        public string Environment {  set; get; }
+        public double Lapse {  set; get; }
     }
 
-    public class PingDefault : IPing
+    internal class PingDefault : IPing
     {
         private PingEnv env;
         private IRestHandler handler;
@@ -39,20 +44,17 @@ namespace HeartBeatAgent.Ping
         {
             return Try(() => RestHandler.RetryPolicy().ExecuteAsync(() => handler.Get(env.Host, env.Uri)))
                 .Map(r => r.Result.Content.ReadAsStringAsync().Result)
-                .Filter(r => r.Contains("ok"))
+                .Filter(r => r.Contains("build"))
                 .Match(Succ: ToPingResponse(), Fail: ToNetworkFailure());
         }
-
         private Func<string, PingResult> ToPingResponse()
         {
-            return m => new PingSuccessResult();
+            return m => new PingSuccessResult(env);
         }
-
         private Func<Exception, PingResult> ToNetworkFailure()
         {
-            return e => new PingErrorResult();
+            return e => new PingErrorResult(env);
         }
-
     }
 
     public interface PingResult
@@ -60,19 +62,49 @@ namespace HeartBeatAgent.Ping
         string ToJson();
     }
 
-    public class PingSuccessResult : PingResult
+    internal class PingSuccessResult : PingResult
     {
+        private PingEnv _enviroment;
+        internal PingSuccessResult(PingEnv env)
+        {
+            _enviroment = env;
+        }
         public string ToJson()
         {
-            return "{\"status\":\"success\"}";
+            var parameters = new
+            {
+                timestamp = DateTime.Now.Ticks,
+                env = _enviroment.Environment,
+                node = _enviroment.Node,
+                status = true,
+                statusCode = 200,
+                lapse = _enviroment.Lapse
+            };
+
+            return JsonConvert.SerializeObject(parameters);
         }
     }
 
-    public class PingErrorResult : PingResult
+    internal class PingErrorResult : PingResult
     {
+        private PingEnv _enviroment;
+        internal PingErrorResult(PingEnv env)
+        {
+            _enviroment = env;
+        }
         public string ToJson()
         {
-            return "{\"status\":\"failure\"}";
+            var parameters = new
+            {
+                timestamp = DateTime.Now.Ticks,
+                env = _enviroment.Environment,
+                node = _enviroment.Node,
+                status = false,
+                statusCode = 500,
+                lapse = _enviroment.Lapse
+            };
+
+            return JsonConvert.SerializeObject(parameters);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace HeartBeatAgente_test
         {
             Mock<IRestHandler> mock = new Mock<IRestHandler>();
             mock.Setup(x => x.Get("", "")).Throws(new HttpRequestException());
-            var p = new PingDefault(new PingEnv("", "", ""), mock.Object);
+            var p = new PingDefault(new PingEnv("", "", "","","", TimeSpan.FromSeconds(30).Ticks), mock.Object);
             var r = p.TryPingServer();
             Assert.AreEqual("failure", r.ToJson());
         }

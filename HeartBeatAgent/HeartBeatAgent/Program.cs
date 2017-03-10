@@ -16,7 +16,7 @@ namespace HeartBeatAgent
         static void Main(string[] args)
         {
 
-            var appSettings = ConfigurationSettings.AppSettings;
+            var appSettings = ConfigurationManager.AppSettings;
 
             var pingHost = appSettings["ping.host"];
             var pingUri = appSettings["ping.uri"];
@@ -24,20 +24,24 @@ namespace HeartBeatAgent
             var factHost = appSettings["fact.host"];
             var factUri = appSettings["fact.uri"];
 
+
+            var lapse = Convert.ToDouble(appSettings.Get("lapse"));
+            var node = appSettings.Get("node");
+            var env = appSettings.Get("environment");
+
             IRestHandler restHandler = new RestHandler();
 
-            PingScheduler scheduler = new PingScheduler(
-                new PingDefault(new PingEnv(pingHost, "/test", pingUri), restHandler),
+            var scheduler = new PingScheduler(
+                new PingDefault(new PingEnv(pingHost, "/test", pingUri, env, node, lapse), restHandler),
                 new FactRepository(restHandler, factHost, factUri)
             );
 
-            var seconds = TimeSpan.FromSeconds(30);
 
             using (var system = ActorSystem.Create("HeartBeatAgent"))
             {
                 using (var materializer = system.Materializer(ActorMaterializerSettings.Create(system).WithSupervisionStrategy(Deciders.RestartingDecider)))
                 {
-                    var task = scheduler.StartScheduler(seconds, materializer);
+                    var task = scheduler.StartScheduler(lapse, materializer);
                     task.Wait();
                 }
             }
