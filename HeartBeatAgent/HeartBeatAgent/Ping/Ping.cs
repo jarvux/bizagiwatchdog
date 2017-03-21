@@ -10,9 +10,9 @@ namespace HeartBeatAgent.Ping
         PingResult TryPingServer();
     }
 
-    internal class PingEnv
+    public class PingEnv
     {
-        public PingEnv(string host, string project, string uri, string environment, string node, double lapse)
+        public PingEnv(string host, string project, string uri, string environment, string node, int lapse, string component)
         {
             Host = host;
             Project = project;
@@ -20,17 +20,19 @@ namespace HeartBeatAgent.Ping
             Environment = environment;
             Node = node;
             Lapse = lapse;
+            Component = component;
         }
 
         public string Host { private set; get; }
         public string Project { private set; get; }
         public string Uri { private set; get; }
-        public string Node {  set; get; }
-        public string Environment {  set; get; }
-        public double Lapse {  set; get; }
+        public string Node { set; get; }
+        public string Environment { set; get; }
+        public int Lapse { set; get; }
+        public string Component { set; get; }
     }
 
-    internal class PingDefault : IPing
+    public class PingDefault : IPing
     {
         private PingEnv env;
         private IRestHandler handler;
@@ -73,12 +75,13 @@ namespace HeartBeatAgent.Ping
         {
             var parameters = new
             {
-                timestamp = DateTime.Now.Ticks,
+                timestamp = DateTime.UtcNow.Ticks, 
                 env = _enviroment.Environment,
                 node = _enviroment.Node,
                 status = true,
                 statusCode = 200,
-                lapse = _enviroment.Lapse
+                lapse = _enviroment.Lapse,
+                component = _enviroment.Component
             };
 
             return JsonConvert.SerializeObject(parameters);
@@ -96,12 +99,13 @@ namespace HeartBeatAgent.Ping
         {
             var parameters = new
             {
-                timestamp = DateTime.Now.Ticks,
+                timestamp = DateTime.UtcNow.Ticks,
                 env = _enviroment.Environment,
                 node = _enviroment.Node,
                 status = false,
                 statusCode = 500,
-                lapse = _enviroment.Lapse
+                lapse = _enviroment.Lapse,
+                component = _enviroment.Component
             };
 
             return JsonConvert.SerializeObject(parameters);

@@ -1,28 +1,27 @@
-﻿using HeartBeatAgent.Rest;
+﻿using System.Threading.Tasks;
+using HeartBeatAgent.Rest;
 
 namespace HeartBeatAgent.Facts
 {
     interface IFactRepository
     {
-        void SendFact(string content);
+        Task SendFact(string content);
     }
 
     class FactRepository: IFactRepository
     {
-        private string host;
-        private IRestHandler restHandler;
-        private string uri;
+        private string QueueName;
+        private IRestHandler RestHandler;
 
-        public FactRepository(IRestHandler restHandler, string host, string uri)
+        public FactRepository(IRestHandler restHandler, string queueName)
         {
-            this.restHandler = restHandler;
-            this.host = host;
-            this.uri = uri;
+            RestHandler = restHandler;
+            QueueName = queueName;
         }
 
-        public void SendFact(string content)
+        public Task SendFact(string content)
         {
-            restHandler.Post(host, uri, content);
+            return RestHandler.Post(QueueName, content);
         }
     }
 }
