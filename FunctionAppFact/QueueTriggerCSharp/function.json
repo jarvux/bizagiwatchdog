@@ -1,0 +1,19 @@
+﻿{
+  "disabled": false,
+  "bindings": [
+    {
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "facts",
+      "name": "facts",
+      "connection": "AzureWebJobsStorage"
+    },
+    {
+      "type": "table",
+      "direction": "out",
+      "tableName": "factconsolidated",
+      "name": "tableWriterBinding",
+      "connection": "AzureWebJobsStorage"
+    }
+  ]
+}
