@@ -20,12 +20,12 @@ namespace HeartBeatAgent.scheduler
             this.factRepository = factRepository;
         }
 
-        public Task StartScheduler(int lapse, IMaterializer materializer)
+        public void StartScheduler(int lapse, IMaterializer materializer)
         {
-            return Source.Tick(TimeSpan.FromSeconds(0), TimeSpan.FromMinutes(lapse), "")
-                .Select(_ => ping.TryPingServer())
-                .Select(r => r.ToJson())
-                .RunWith(Sink.ForEach<string>(f => factRepository.SendFact(f)), materializer);
+            Source.Tick(TimeSpan.FromSeconds(0), TimeSpan.FromMinutes(lapse), "")
+            .Select(_ => ping.TryPingServer())
+            .Select(r => r.ToJson())
+            .RunWith(Sink.ForEach<string>(f => factRepository.SendFact(f)), materializer);
         }
     }
 }

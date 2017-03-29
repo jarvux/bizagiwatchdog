@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using Microsoft.WindowsAzure.Storage;
-using Polly;
-using Microsoft.WindowsAzure.Storage.Queue;
+using System.Threading.Tasks;
 using Microsoft.Azure;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Queue;
+using Polly;
+using Polly.Retry;
+using System.Net.Http.Headers;
 
 namespace HeartBeatAgent.Rest
 {
@@ -30,22 +31,23 @@ namespace HeartBeatAgent.Rest
             }
         }
 
-        public static Polly.Retry.RetryPolicy RetryPolicy()
-        {
-            return Policy
-                .Handle<TaskCanceledException>()
-                .Or<HttpRequestException>()
-                .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1));
-        }
-
         public async Task Post(string queueName, string message)
         {
-            var storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+            var storageAccount =
+                CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
             var queueClient = storageAccount.CreateCloudQueueClient();
             var cloudQueue = queueClient.GetQueueReference(queueName);
             await cloudQueue.CreateIfNotExistsAsync();
             var queueMsg = new CloudQueueMessage(message);
             await cloudQueue.AddMessageAsync(queueMsg);
+        }
+
+        public static RetryPolicy RetryPolicy()
+        {
+            return Policy
+                .Handle<TaskCanceledException>()
+                .Or<HttpRequestException>()
+                .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1));
         }
     }
 }
