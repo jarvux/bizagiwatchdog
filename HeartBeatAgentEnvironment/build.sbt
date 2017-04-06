@@ -30,6 +30,8 @@ libraryDependencies ++= Seq(
   "com.microsoft.azure" % "azure-storage" % "5.0.0"
 )
 
+libraryDependencies += "net.liftweb" % "lift-webkit_2.12" % "3.1.0-M1"
+
 mergeStrategy in assembly := {
   case "META-INF/MSFTSIG.RSA" => MergeStrategy.first
   case x =>

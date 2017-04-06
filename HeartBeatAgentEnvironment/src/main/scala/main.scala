@@ -2,9 +2,8 @@
   * Created by JarviZ on 03/04/2017.
   */
 
-import java.net.SocketTimeoutException
+import java.net.{SocketTimeoutException, UnknownHostException}
 import java.time.{Clock, LocalDateTime, LocalTime}
-import java.util.UUID
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
@@ -15,63 +14,45 @@ import scala.util.Try
 import scalaj.http.Http
 import com.microsoft.azure.storage.CloudStorageAccount
 import com.microsoft.azure.storage.table.{CloudTableClient, TableOperation, TableQuery, TableServiceEntity}
+import net.liftweb.json._
 
-import scala.util.parsing.json.JSON
 
 object Main extends App {
 
   implicit val system = ActorSystem("HeartBeatAgent")
   implicit val materializer = ActorMaterializer()
   val interval = 10
+  val runCloudEnvironmentsService = "http://dev-diegopt/BizagiCloudRun/api/environments/all"
 
   Source
     .tick(0 seconds, interval second, "")
-    .map(_ => invokeEnvService )
+    .map(_ => invokeEnvService(runCloudEnvironmentsService))
     .map(list => list.par.map(e => (e, ping(e), interval)))
     .runForeach(l => l.map(r => aggregate(r._1, r._2, interval)))
 
-  def invokeEnvService : List[Env] = List(
-    //Env("http://localhost/BizAgiR110x/", UUID.randomUUID().toString.toUpperCase),
-    Env("http://localhost/BizAgiR110x/", UUID.fromString("911A2836-8D93-4ACB-8D55-443C9125AD52").toString.toUpperCase)
-  )
-
-  def invokeEnvService2 : Try[List[Env]] = {
-    Try{
-      Http("http://dev-diegopt/BizagiCloudRun/api/environments/all").timeout(10000,20000).asString
-    }.map{
-      r => stringToList(r.body)
-    }
+  def invokeEnvService (url: String): List[Env] = {
+    Try {
+      Http(url).timeout(10000, 20000).asString
+    }.map { r => stringToList(r.body) }.getOrElse(List.empty)
   }
 
-  def stringToList(body: String): List[Env] =
-  {
-      val result = JSON.parseFull(body)
-      result match {
-        case Some(list: List[Env]) => list
-        //case None => List(new Env("",""))
-      }
+  def stringToList(body: String): List[Env] = {
+    implicit val formats = DefaultFormats
+    parse(body).extract[List[Env]]
   }
 
   def ping(env: Env): PingResult =
     Try {
       Http(s"${env.publicUrl}/jquery/version.json.txt").timeout(1000, 5000).asString
-    }.filter {
-      r => r.code == 200 && r.body.contains("build")
-    }.map {
-      r => PingSuccess(r.body)
+    }.filter { r => r.code == 200 && r.body.contains("build")
+    }.map { r => PingSuccess(r.body)
     }.recover {
       case _: SocketTimeoutException => PingTimeout("503")
+      case _: UnknownHostException => PingTimeout("505")
       case _: Exception => PingError("500")
     }.getOrElse(PingError("509"))
 
   def aggregate(env: Env, ping: PingResult, interval: Double): Unit = {
-
-    val list = invokeEnvService2
-    /*for (env <- list.get)
-    {
-      val e = env.environmentId
-     val u = env.publicUrl
-    }*/
 
     val storageAccount = CloudStorageAccount.parse("DefaultEndpointsProtocol=http;AccountName=eus20functions0dev0sa;AccountKey=JpUG8+fMZuCqMs9++vzQbFzHrUFQykzWZO3thqXTN70fE/edkXusYPhYwEu1Y/tTdgeVJjBJQiTyxzmy4Zk3MQ==")
     val tableClient = storageAccount.createCloudTableClient()
